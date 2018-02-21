@@ -27,9 +27,6 @@ public class Viruslogica {
 	static ArrayList<Integer> hostslist;
 	static ArrayList<Virus> uniVirus = new ArrayList<Virus>();
 	static ArrayList<Virus> virusesSelectie;
-	static ArrayList<Virus> viruseshost1 = new ArrayList<Virus>();
-	static ArrayList<Virus> viruseshost2 = new ArrayList<Virus>();
-	static ArrayList<Virus> virusesRes = new ArrayList<Virus>();
 
     /**
      *Main functie start het programma door een GUI aan te maken
@@ -177,18 +174,12 @@ public class Viruslogica {
      */
 	public static void sorteerViruses() {
 		//Declaratie Variabelen
+                ArrayList<Virus> viruseshost1 = new ArrayList<Virus>();
+                ArrayList<Virus> viruseshost2 = new ArrayList<Virus>();
+                ArrayList<Virus> virusesRes = new ArrayList<Virus>();
 		int keuze1 = Window.getKeuze_host_id_1();
 		int keuze2 = Window.getKeuze_host_id_2();
-		//if-statements voor de gekozen sortering
-		if(Window.getRdbtnID()) {
-			Collections.sort(virusesSelectie, Virus.IDComparator());
-		}
-		if(Window.getRdbtnClass()) {
-			Collections.sort(viruseshost1, Virus.ClassComparator());
-		}
-		if(Window.getRdbtnHosts()) {
-			Collections.sort(viruseshost1, Virus.AantalComparator());
-		}
+                    
 		try {
 			//Onderstaande code voegt de objecten die overeenkomen met de gekozen hosts toe aan lijsten
 			for(int i = 0; i < virusesSelectie.size(); i++) {
@@ -205,10 +196,26 @@ public class Viruslogica {
 					virusesRes.add(viruseshost1.get(i));
 				}
 			}
-			if(Window.getRdbtnID()) {
-				Collections.sort(viruseshost1, Virus.IDComparator());
-				Collections.sort(viruseshost2, Virus.IDComparator());
-			}
+                        /**
+                         * Deze if Statements zijn verantwoordelijk voor het sorteren op basis van de geselecteerde Radiobutton
+                         * ik had deze if statements voorheen voor het selecteren van de hosts staan, maar de volgorde ging in bovenstaande code verloren
+                        */
+                        if (Window.getRdbtnID()) {
+                            Collections.sort(viruseshost1, Virus.IDComparator());
+                            Collections.sort(viruseshost2, Virus.IDComparator());
+                            Collections.sort(virusesRes, Virus.IDComparator());
+                            }
+                        if (Window.getRdbtnClass()) {
+                            Collections.sort(viruseshost1, Virus.ClassComparator());
+                            Collections.sort(viruseshost2, Virus.ClassComparator());
+                            Collections.sort(virusesRes, Virus.ClassComparator());
+                            }
+                        if (Window.getRdbtnHosts()) {
+                            Collections.sort(viruseshost1, Virus.AantalComparator());
+                            Collections.sort(viruseshost2, Virus.AantalComparator());
+                            Collections.sort(virusesRes, Virus.AantalComparator());
+                            }
+                        
 		}catch(IndexOutOfBoundsException e) {
 			System.out.println("De lijsten bevatten geen waarden");
 			e.printStackTrace();
