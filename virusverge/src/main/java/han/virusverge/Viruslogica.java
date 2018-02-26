@@ -38,7 +38,7 @@ public class Viruslogica {
 	}
 
 	/**
-         * Deze functie zorgt voor het verwerken van de ingevoerde URL en download het bestand van ftp.genome.jp
+         * Deze functie zorgt voor het verwerken van de ingevoerde URL en download het bestand van ftp.genome.jp de regels van het bestand worden in een object gestopt
          * 
          * @throws MalformedURLException bij een verkeerde URL
          */
@@ -49,21 +49,22 @@ public class Viruslogica {
 		 */
 
 		//Declaratie Variabelen
-		ArrayList<String> lines = new ArrayList<String>();
 		URL virushostdb = new URL(Window.gettxtURL().getText());
                 
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(virushostdb.openStream()));
 			String inputLine;
+                        in.readLine(); //zorgt er voor dat de eerste regel met titels niet meegenomen word
+                        //deze while loop leest elke regel en stopt deze in een object
 			while ((inputLine = in.readLine()) != null)
-				lines.add(inputLine);
+				allViruses.add(new Virus(inputLine));
 			in.close();
 		} catch (IOException ex) {
 			System.out.println("Error: " + ex.getMessage());
 			ex.printStackTrace();
 		}finally {
 			try {
-				lijstMaker(lines); 
+				lijstMaker(); 
 			}catch(IndexOutOfBoundsException e) {
 				System.out.println("De lijst bevat onjuiste of niet leesbare waarden");
 				e.printStackTrace();
@@ -72,18 +73,12 @@ public class Viruslogica {
 	}
 
 	/**
-         * functie maakt een lijst zonder duplicaten van de lijst met lines
+         * functie maakt een lijst zonder duplicaten van de lijst van alle virusobjecten
          * 
-         * @param lines functie maakt een lijst zonder duplicaten van de lijst met lines
          */
-	public static void lijstMaker(ArrayList<String> lines) {
-		//deze line word weggehaald omdat deze de kolomtitels bevat
-		lines.remove(0);
-		//Instantieer nieuwe objecten met de regels van het bestand
+	public static void lijstMaker() {
+            
 		try {
-			for (int i = 0; i < lines.size(); i++) {
-				allViruses.add(new Virus(lines.get(i)));
-			}
 			//Dmv een HashSet word er een lijst zonder duplicaten aangemaakt
 			Set<Integer> virus_ids = new HashSet<Integer>();
 			for(int i = 0; i<allViruses.size(); i++) {
